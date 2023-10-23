@@ -1,0 +1,59 @@
+M 30 13
+N 5.5 100 10000 400 1000
+
+S 6 1 10 5
+E 1 10 0 02 2 4
+E 2 10 0 02 2 4
+
+P 1 1 10 5
+
+P 11 11 10 5
+P 9 1 10 5
+E 3 10 0 02 2 4
+
+P 9 3 10 5
+E 4 10 0 02 2 4
+E 5 10 0 02 2 4
+
+P 7 3 10 5
+E 5 10 0 02 2 4
+E 6 10 0 02 2 4
+
+P 7 8 10 5
+
+P 2 3 10 5
+
+P 2 6 10 5
+P 0 6 10 5
+P 2 8 10 5
+P 5 8 10 5
+P 9 6 10 5
+P 7 8 10 5
+P 9 11 10 5
+P 9 11 10 5
+P 11 1 10 5
+P 11 11 10 5
+D 10 26 10 5
+
+
+    private double oldHeuristic(State current) {
+        double startX = stations.get(0).x;
+        double startY = stations.get(0).y;
+        double xTargetDistance = home.x - current.node.x;
+        double yTargetDistance = home.y - current.node.y;
+        double xStartDistance = current.node.x - startX;
+        double yStartDistance = current.node.y - startY;
+        xTargetDistance *= xTargetDistance;
+        yTargetDistance *= yTargetDistance;
+        xStartDistance *= xStartDistance;
+        yStartDistance *= yStartDistance;
+        double distanceFromStart = Math.sqrt(xStartDistance + yStartDistance);
+        double distanceToEnd = Math.sqrt(xTargetDistance + yTargetDistance);
+        double distance = distanceFromStart + distanceToEnd;
+        return switch (priorityCost) {
+            case 1 -> distance / walkingSpeed;
+            case 2 -> distance * taxiCost;
+            case 3 -> distance * 10;
+            default -> distance / walkingSpeed + distance * taxiCost - distance * 10;
+        };
+    }
